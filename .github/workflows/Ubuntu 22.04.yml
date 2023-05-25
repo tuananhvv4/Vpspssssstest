@@ -1,0 +1,42 @@
+name: Ubuntu 22.04
+run-name: Chào mừng ${{ github.actor }} đến với Rinne VPS 🚀
+on:
+  workflow_dispatch:
+    inputs:
+      ps:
+        description: 'Mật khẩu người dùng'
+        required: true
+      os:
+        description: 'Nhập mã Debian Linux ở Chrome Remote Desktop'
+        required: true
+      os2:
+        description: 'Nhập PIN (6 số trở lên)'
+        required: true
+jobs:
+  Ubuntu_2204:
+    timeout-minutes: 360
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Tải file cấu hình...
+      uses: actions/checkout@v1
+    - name: Đang xác nhận mã Debian Linux
+      run: |
+           echo Đang đổi mật khẩu thành: HIỂN THỊ MẬT KHẨU ĐÃ BỊ XOÁ VÌ LÍ DO BẢO MẬT
+         
+           sudo useradd -m runneradmin &>/dev/null &
+           echo 'runneradmin:${{ github.event.inputs.ps }}' | sudo chpasswd &>/dev/null &
+           sudo sed -i 's/\/bin\/sh/\/bin\/bash/g' /etc/passwd &>/dev/null &
+           sudo useradd -m runner &>/dev/null &
+           echo 'runner:${{ github.event.inputs.ps }}' | sudo chpasswd &>/dev/null &
+           sudo sed -i 's/\/bin\/sh/\/bin\/bash/g' /etc/passwd &>/dev/null &
+           echo Tên người dùng là: runneradmin hoặc runner
+           echo Mật khẩu là: HIỂN THỊ MẬT KHẨU ĐÃ BỊ XOÁ VÌ LÍ DO BẢO MẬT
+         
+           bash bash1.sh
+           ${{ github.event.inputs.os }} --pin=${{ github.event.inputs.os2 }} &>/dev/null 
+    - name: Trước khi kết nối VPS, bạn phải chờ cho ô này chạy xong!
+      run: |
+           bash bash2.sh
+    - name: Thành công!
+      run: yes &>/dev/null
+      timeout-minutes: 999

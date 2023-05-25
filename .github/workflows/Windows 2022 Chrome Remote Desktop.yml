@@ -1,0 +1,60 @@
+name: Windows Server 2022 Chrome Remote Desktop 
+run-name: Chào mừng ${{ github.actor }} đến với Rinne VPS 🚀
+on:
+  workflow_dispatch:
+    inputs:
+      os:
+        description: 'Nhập mã Windows (Powershell) từ Chrome Remote Desktop'
+        required: true
+      os2:
+        description: 'Nhập mật khẩu cho người dùng'
+        required: true
+      pin:
+        description: 'Nhập PIN cho Chrome Remote Desktop (6 số trở lên) '
+        required: true
+      os3:
+        description: 'Nhập mã token Ngrok (tuỳ chọn)'
+        required: false
+jobs:
+  Windows_Server_2022:
+    timeout-minutes: 360
+    runs-on: windows-latest
+    name: Đang chạy
+    steps:
+    - name: Tải code cấu hình...
+      uses: actions/checkout@v3
+      timeout-minutes: 360
+    - name: Tạo tài khoản
+      run: |
+            powershell.exe -File 1.ps1 > $null
+            net.exe user $env:UserName ${{ github.event.inputs.os2 }} > $null
+            net user installer ${{ github.event.inputs.os2 }} > $null
+      timeout-minutes: 360
+    - name: Chạy Chrome Remote Desktop & Ngrok
+      run: |
+            choco install ngrok > $null
+            ngrok config add-authtoken ${{ github.event.inputs.os3 }} > $null
+            powershell.exe -File c.ps1 > $null
+            ${{ github.event.inputs.os }} --pin=${{ github.event.inputs.pin }} > $null
+    - name: Chạy Ngrok (Nếu bạn đã nhập token)
+      shell: bash
+      run: bash 3389.sh
+      timeout-minutes: 360
+    - name: Username & IP NGROK
+      run: |
+            write-host IP LÀ:
+            curl -s localhost:4040/api/tunnels | jq -r .tunnels[0].public_url || echo "Lỗi token"
+            write-host Username: $env:UserName
+            write-host Username: installer
+            write-host Password: HIỂN THỊ MẬT KHẨU ĐÃ BỊ XOÁ VÌ LÍ DO BẢO MẬT
+
+         
+    - name: Chạy thành công VPS, Hãy vào Chrome Remote Desktop để truy cập
+      run: |
+            powershell.exe -File 3.ps1
+      timeout-minutes: 360
+    - name: Đã xong! Chúc bạn vui vẻ
+      run: |
+            ping -t 127.0.0.1
+            
+      timeout-minutes: 360

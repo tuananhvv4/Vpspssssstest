@@ -1,0 +1,51 @@
+name: Ubuntu 20.04 SSH
+run-name: Chào mừng ${{ github.actor }} đến với Rinne VPS 🚀
+on:
+  workflow_dispatch:
+    inputs:
+      ps5:
+        description: 'Thêm tên người dùng'
+        required: false
+      ps:
+        description: 'Mật khẩu người dùng'
+        required: true
+      os:
+        description: 'SSH KEY PUBLIC CỦA BẠN'
+        required: true
+      
+jobs:
+  Ubuntu_2004:
+    timeout-minutes: 360
+    runs-on: ubuntu-20.04
+    steps:
+    
+    
+    - name: Đang chạy...
+      run: |
+           sudo su runneradmin
+           cd
+           sudo service sshd start
+           
+           
+           sudo useradd -m runneradmin &>/dev/null &
+           sudo useradd -m ${{ github.event.inputs.ps5 }} &>/dev/null &
+           echo 'runneradmin:${{ github.event.inputs.ps }}' | sudo chpasswd &>/dev/null &
+           sudo sed -i 's/\/bin\/sh/\/bin\/bash/g' /etc/passwd &>/dev/null &
+           sudo useradd -m runner &>/dev/null &
+           echo 'runner:${{ github.event.inputs.ps }}' | sudo chpasswd &>/dev/null &
+           echo '${{ github.event.inputs.ps5 }}:${{ github.event.inputs.ps }}' | sudo chpasswd &>/dev/null &
+           sudo sed -i 's/\/bin\/sh/\/bin\/bash/g' /etc/passwd &>/dev/null &
+           echo Tên người dùng là: ${{ github.event.inputs.ps5 }} , runneradmin, runner
+           cd && cd && cd && cd && echo "${{ github.event.inputs.os }}"  >> /home/runneradmin/.ssh/authorized_keys
+           sudo apt update &>/dev/null 
+           sudo apt install snapd -y &>/dev/null 
+           sudo snap install ngrok &>/dev/null 
+           echo TOKEN NGROK ĐƯỢC TẠO BỞI MÌNH, BẠN SẼ KHÔNG CẦN NHẬP TOKEN
+           ngrok authtoken 2Q2rHTw4NtzRr7TmzWjgDtasgoF_5hJEnRDGjGMj3bYC25JoS &>/dev/null &
+           ngrok authtoken 2Q2rLzdiscxRmtlgRGVUiPyrjKK_53w6FYjWtS9KJGu9Gctfu &>/dev/null &
+           ngrok tcp 22 &>/dev/null &
+           echo Để kết nối ssh qua trình vào ssh, nhập IP sau, và bỏ "tcp://" số port là số đằng sau dấu hai chấm
+           curl -s localhost:4040/api/tunnels | jq -r .tunnels[0].public_url || echo "Lỗi token"
+           echo Với OPENSSH CLI nhập ssh TÊN NGƯỜI DÙNG@IP -p SỐ PORTS
+           yes &>/dev/null
+        

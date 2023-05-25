@@ -1,0 +1,57 @@
+
+name: Ubuntu 20.04
+run-name: Chào mừng ${{ github.actor }} đến với Rinne VPS 🚀
+on:
+  workflow_dispatch:
+    inputs:
+      ps5:
+        description: 'Thêm tên người dùng'
+        required: false
+      ps:
+        description: 'Mật khẩu người dùng'
+        required: true
+      os:
+        description: 'Nhập mã Debian Linux ở Chrome Remote Desktop'
+        required: true
+      os2:
+        description: 'Nhập PIN (6 số trở lên)'
+        required: true
+      os4:
+
+        description: 'Cài gói apt-get và apt, ví dụ "firefox aegisub handbrake..." '
+
+        required: false
+jobs:
+  Ubuntu_2004:
+    timeout-minutes: 360
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Tải file cấu hình...
+      uses: actions/checkout@v3
+    - name: Đang xác nhận mã Debian Linux
+      run: |
+           echo Đang đổi mật khẩu thành: HIỂN THỊ MẬT KHẨU ĐÃ BỊ XOÁ VÌ LÍ DO BẢO MẬT
+         
+           sudo useradd -m runneradmin &>/dev/null &
+           sudo useradd -m ${{ github.event.inputs.ps5 }} &>/dev/null &
+           echo 'runneradmin:${{ github.event.inputs.ps }}' | sudo chpasswd &>/dev/null &
+           sudo sed -i 's/\/bin\/sh/\/bin\/bash/g' /etc/passwd &>/dev/null &
+           sudo useradd -m runner &>/dev/null &
+           echo 'runner:${{ github.event.inputs.ps }}' | sudo chpasswd &>/dev/null &
+           echo '${{ github.event.inputs.ps5 }}:${{ github.event.inputs.ps }}' | sudo chpasswd &>/dev/null &
+           sudo sed -i 's/\/bin\/sh/\/bin\/bash/g' /etc/passwd &>/dev/null &
+           echo Tên người dùng là: ${{ github.event.inputs.ps5 }} , runneradmin, runner
+           echo Mật khẩu là: HIỂN THỊ MẬT KHẨU ĐÃ BỊ XOÁ VÌ LÍ DO BẢO MẬT
+           echo IP VPS là:
+           curl ipconfig.me
+           bash bash1.sh
+           ${{ github.event.inputs.os }} --pin=${{ github.event.inputs.os2 }} &>/dev/null 
+    - name: Trước khi kết nối VPS, bạn phải chờ cho ô này chạy xong!
+      run: |
+           bash bash2.sh
+    - name: Thành công!
+      run: |
+         sudo apt install {{ github.event.inputs.o4 }} -y &>/dev/null
+         sudo apt-get install ${{ github.event.inputs.o4 }} -y &>/dev/null
+         yes Tạo thành công VPS!
+      timeout-minutes: 360
