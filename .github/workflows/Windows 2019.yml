@@ -1,5 +1,5 @@
 name: Windows Server 2019
-run-name: Chào mừng ${{ github.actor }} đến với Rinne VPS 🚀
+run-name: Chào mừng ${{ github.actor }} đến với Hargonvps
 on:
   workflow_dispatch:
     inputs:
